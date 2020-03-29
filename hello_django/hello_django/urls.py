@@ -21,7 +21,16 @@ from school_management import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('student/', views.StudentList.as_view(), name="student_list"),
-    path('student/<int:school_id>', views.StudentListFiltered.as_view(), name="student_specific_school_list"),
-    path('school/', views.SchoolList.as_view(), name="school_list"),
+    
+    #test for GenericsAPIView
+    #path('student/', views.StudentList.as_view(), name="student_list"),
+    #path('student/<int:school_id>', views.StudentListFiltered.as_view(), name="student_specific_school_list"),
+    #path('school/', views.SchoolList.as_view(), name="school_list"),
+
+    #for ModelViewSet
+    path('student/',                    views.StudentListViewSet.as_view({'get': 'list', 'post': 'create'}),                            name="student_list"),
+    path('school/',                     views.SchoolListViewSet.as_view({'get': 'list', 'post': 'create'}),                             name="school_list"),
+    path('student/<int:pk>',            views.StudentListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),   name="studuent_obj"),
+    path('school/<int:pk>',             views.SchoolListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),    name="school_obj"),
+
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

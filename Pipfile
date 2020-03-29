@@ -10,6 +10,7 @@ django = "==3.0.4"
 psycopg2 = "==2.8.4"
 pillow = "*"
 djangorestframework = "*"
+drf-nested-routers = "*"
 
 [requires]
 python_version = "3.6"

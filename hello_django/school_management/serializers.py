@@ -1,10 +1,7 @@
+import uuid
 from school_management.models import Student, School
 from rest_framework import serializers
-
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = ("pic", "student_id", "first_name", "last_name", "school")
+from django.conf import settings
 
 class SchoolSerializer(serializers.ModelSerializer):
     curr_student = serializers.SerializerMethodField()
@@ -14,4 +11,23 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ("pic", "name", "max_student", "curr_student")
+        fields = ("id", "pic", "name", "max_student", "curr_student")
+
+class StudentSerializer(serializers.ModelSerializer):
+    #school = SchoolSerializer()
+
+    def validate(self, data):
+        school_obj = data["school"]
+        if school_obj.student_set.count() >= school_obj.max_student:
+            raise serializers.ValidationError({"error":settings.SCHOOL_FULL_ERR_MSG})
+        return data
+
+    def create(self, validated_data):
+        student = Student.objects.create(**validated_data)
+        student.unique_identification_string = uuid.uuid4().hex
+        student.save()
+        return student
+
+    class Meta:
+        model = Student
+        fields = ("id", "pic", "student_id", "first_name", "last_name", "nationality", "school")

@@ -8,7 +8,10 @@ class SchoolAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" width="100" height="100" />'.format(obj.pic.url))
     image_tag.short_description = 'School Image'
 
-    list_display = ("image_tag", "name", "max_student")
+    def curr_student(self, obj):
+        return obj.student_set.count()
+
+    list_display = ("id", "image_tag", "name", "max_student", "curr_student")
 admin.site.register(School, SchoolAdmin)
 
 class StudentAdmin(admin.ModelAdmin):
@@ -19,5 +22,6 @@ class StudentAdmin(admin.ModelAdmin):
     def get_school(self, obj):
         return obj.school.name
 
-    list_display = ("image_tag", "student_id", "first_name", "last_name", "get_school")
+    list_display = ("id", "image_tag", "student_id", "first_name", "last_name", "nationality", "get_school")
+    readonly_fields = ("unique_identification_string",)
 admin.site.register(Student, StudentAdmin)

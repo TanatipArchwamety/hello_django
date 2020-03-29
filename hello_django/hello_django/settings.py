@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['178.128.92.122', '127.0.0.1', 'localhost']
 
 MEDIA_URL = '/site_media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+SCHOOL_FULL_ERR_MSG = "This school is already full. Try to increate max_student capacity or decrease the number of students"
 
 # Application definition
 

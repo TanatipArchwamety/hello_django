@@ -1,9 +1,9 @@
-from django.shortcuts import render
-from rest_framework import status, generics, viewsets
+from django.shortcuts import render, get_object_or_404
+from rest_framework import status, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.viewsets import ModelViewSet
 
 from school_management.models import Student, School
 from school_management.serializers import StudentSerializer, SchoolSerializer
@@ -59,7 +59,6 @@ class StudentList(APIView):
         response_data = self.__create_response_list(request)
         response_data.append(self.__create_student_list())
         return Response(status=status.HTTP_200_OK, data=response_data)
-"""
 
 #short class based view with serializer, GenericsAPIView
 class StudentList(generics.ListAPIView):
@@ -76,5 +75,25 @@ class StudentListFiltered(generics.ListAPIView):
 class SchoolList(generics.ListAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+"""
 
 
+#class based view with serializer, ModelViewSet
+class StudentListViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def retrieve(self, request, pk=None):
+        student = get_object_or_404(self.queryset, id=pk)
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+
+class SchoolListViewSet(ModelViewSet):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+    def retrieve(self, request, pk=None):
+        school = get_object_or_404(self.queryset, id=pk)
+        serializer = SchoolSerializer(school)
+        return Response(serializer.data)
