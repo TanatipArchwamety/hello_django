@@ -9,6 +9,30 @@ from school_management.models import Student, School
 from school_management.serializers import StudentSerializer, SchoolSerializer
 # Create your views here.
 
+#for drf-nested-routers
+class StudentListViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get_queryset(self):
+        return Student.objects.filter(school=self.kwargs['school_pk'])
+
+    def retrieve(self, request, pk=None, school_pk=None):
+        #student = get_object_or_404(self.queryset, id=pk)
+        student = self.queryset.get(id=pk, school=school_pk)
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+class SchoolListViewSet(ModelViewSet):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+    def retrieve(self, request, pk=None):
+        school = get_object_or_404(self.queryset, id=pk)
+        serializer = SchoolSerializer(school)
+        return Response(serializer.data)
+
+
 #function based view
 """
 @api_view(['POST'])
@@ -75,7 +99,6 @@ class StudentListFiltered(generics.ListAPIView):
 class SchoolList(generics.ListAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
-"""
 
 
 #class based view with serializer, ModelViewSet
@@ -88,7 +111,6 @@ class StudentListViewSet(ModelViewSet):
         serializer = StudentSerializer(student)
         return Response(serializer.data)
 
-
 class SchoolListViewSet(ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
@@ -97,3 +119,4 @@ class SchoolListViewSet(ModelViewSet):
         school = get_object_or_404(self.queryset, id=pk)
         serializer = SchoolSerializer(school)
         return Response(serializer.data)
+"""

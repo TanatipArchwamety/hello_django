@@ -13,24 +13,45 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
+#from rest_framework.routers import DefaultRouter
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
-from school_management import views
+from school_management.views import StudentListViewSet, SchoolListViewSet
+
+#NESTED
+router = SimpleRouter()
+router.register(r'schools', SchoolListViewSet)
+schools_router = NestedSimpleRouter(router, r'schools', lookup='school')
+schools_router.register(r'students', StudentListViewSet)
+
+#SIMPLE
+#router = DefaultRouter()
+#router.register(r'schools', SchoolListViewSet)
+#router.register(r'students', StudentListViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
+    #for drf-nested-routers
+    path('', include(router.urls)),
+    path('', include(schools_router.urls)),
+
+    #for default routers
+    #path('', include(router.urls)),
+
     #test for GenericsAPIView
-    #path('student/', views.StudentList.as_view(), name="student_list"),
-    #path('student/<int:school_id>', views.StudentListFiltered.as_view(), name="student_specific_school_list"),
-    #path('school/', views.SchoolList.as_view(), name="school_list"),
+    #path('student/', StudentList.as_view(), name="student_list"),
+    #path('student/<int:school_id>', StudentListFiltered.as_view(), name="student_specific_school_list"),
+    #path('school/', SchoolList.as_view(), name="school_list"),
 
     #for ModelViewSet
-    path('students/',                    views.StudentListViewSet.as_view({'get': 'list', 'post': 'create'}),                            name="student_list"),
-    path('schools/',                     views.SchoolListViewSet.as_view({'get': 'list', 'post': 'create'}),                             name="school_list"),
-    path('students/<int:pk>',            views.StudentListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),   name="studuent_obj"),
-    path('schools/<int:pk>',             views.SchoolListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),    name="school_obj"),
+    #path('students/',                    StudentListViewSet.as_view({'get': 'list', 'post': 'create'}),                            name="student_list"),
+    #path('schools/',                     SchoolListViewSet.as_view({'get': 'list', 'post': 'create'}),                             name="school_list"),
+    #path('students/<int:pk>',            StudentListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),   name="studuent_obj"),
+    #path('schools/<int:pk>',             SchoolListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),    name="school_obj"),
 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
