@@ -28,9 +28,9 @@ urlpatterns = [
     #path('school/', views.SchoolList.as_view(), name="school_list"),
 
     #for ModelViewSet
-    path('student/',                    views.StudentListViewSet.as_view({'get': 'list', 'post': 'create'}),                            name="student_list"),
-    path('school/',                     views.SchoolListViewSet.as_view({'get': 'list', 'post': 'create'}),                             name="school_list"),
-    path('student/<int:pk>',            views.StudentListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),   name="studuent_obj"),
-    path('school/<int:pk>',             views.SchoolListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),    name="school_obj"),
+    path('students/',                    views.StudentListViewSet.as_view({'get': 'list', 'post': 'create'}),                            name="student_list"),
+    path('schools/',                     views.SchoolListViewSet.as_view({'get': 'list', 'post': 'create'}),                             name="school_list"),
+    path('students/<int:pk>',            views.StudentListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),   name="studuent_obj"),
+    path('schools/<int:pk>',             views.SchoolListViewSet.as_view({'get': 'retrieve', 'put': 'destroy', 'delete': 'destroy'}),    name="school_obj"),
 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
