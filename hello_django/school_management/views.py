@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import status, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -7,18 +9,36 @@ from rest_framework.viewsets import ModelViewSet
 
 from school_management.models import Student, School
 from school_management.serializers import StudentSerializer, SchoolSerializer
-# Create your views here.
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 #for drf-nested-routers
 class StudentListViewSet(ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        return Student.objects.filter(school=self.kwargs['school_pk'])
+        students = Student.objects.filter(school=self.kwargs['school_pk'])
+
+        first_name  = self.request.query_params.get('first_name', None)
+        last_name   = self.request.query_params.get('last_name', None)
+        nationality = self.request.query_params.get('nationality', None)
+        if first_name is not None:      students = students.filter(first_name__contains=first_name)
+        if last_name is not None:       students = students.filter(last_name__contains=last_name)
+        if nationality is not None:     students = students.filter(nationality__contains=nationality)
+
+        return students
 
     def retrieve(self, request, pk=None, school_pk=None):
-        #student = get_object_or_404(self.queryset, id=pk)
         student = self.queryset.get(id=pk, school=school_pk)
         serializer = StudentSerializer(student)
         return Response(serializer.data)

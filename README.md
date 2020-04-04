@@ -1,7 +1,7 @@
 
-Time explained for 2)
+Time explained
 
-First day: 21:00 - 04:00
+First day: 28Mar2020 21:00 - 04:00
 - Read Heroku.
 - Read Django version 3.0.4.
 - Build local environment, facing postgresql problems on Cygwin (MySQL works, but will not match the test).
@@ -14,7 +14,7 @@ First day: 21:00 - 04:00
 - Rebuild Django-postgres application, customize settings, models, admin. Test adding some records with pic.
 - First commit git.
 
-Second day: 17:00 - 19:15,  22:00 - 01:00
+Second day: 29Mar2020 17:00 - 19:15,  22:00 - 01:00
 - Revise and go over Django Rest Framework.
 - Try function-based view version.
 - Read generic views.
@@ -30,9 +30,14 @@ Second day: 17:00 - 19:15,  22:00 - 01:00
 - Read nested router.
 - Try nested router.
 
+Third day: 4Apr2020 20:00 - 22:00
+- Improve: Student filter by first_name, last_name, nationality (?first_name=, ?last_name=, ?nationality=,)
+- Improve: Data populate method as initial data with fixtures, utils-script using python-faker
+- Improve: Implement pagination max=10 after populated hundreds of students
+
 Note:
 This application still not included these following topics:
-- Bonus topics:  Heroku, Python Faker, Search filter, Pagination.
+- Bonus topics:  Heroku
 - Proper design of foreignkey-relation such as nationality, more attributes such ah birthdate + age calculation.
 - Front end template.
 - Nginx, Gunicorn, Supervisor integration.
